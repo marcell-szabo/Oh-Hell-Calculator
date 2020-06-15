@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Oh Hell Calculator</string>
+    <string name="oh_hell">Oh hell</string>
+    <string name="players_number">players number</string>
+    <string name="rounds_number">rounds number</string>
+    <string name="button">play</string>
 </resources>
