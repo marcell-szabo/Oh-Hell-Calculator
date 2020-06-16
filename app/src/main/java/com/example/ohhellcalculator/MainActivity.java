@@ -8,16 +8,15 @@ import android.view.View;
 import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
-    Names n = new Names();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
     public void play(View view) {
-        Intent intent = new Intent(this, n.getClass());
-        startActivity(intent);
         EditText etplayernum = (EditText) findViewById(R.id. editTextPlayerNum);
-        n.setPlayernumber(Integer.parseInt(etplayernum.getText().toString()));
+        Intent intent = new Intent(this, Names.class);
+        intent.putExtra("playernum", Integer.parseInt(etplayernum.getText().toString()));
+        startActivity(intent);
     }
 }
