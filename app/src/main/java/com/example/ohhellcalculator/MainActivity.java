@@ -15,8 +15,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void play(View view) {
         EditText etplayernum = (EditText) findViewById(R.id. editTextPlayerNum);
-        Intent intent = new Intent(this, Names.class);
-        intent.putExtra("playernum", Integer.parseInt(etplayernum.getText().toString()));
-        startActivity(intent);
+        if(!etplayernum.getText().toString().matches("")) {
+            Intent intent = new Intent(this, Names.class);
+            intent.putExtra("playernum", Integer.parseInt(etplayernum.getText().toString()));
+            startActivity(intent);
+        }
     }
 }

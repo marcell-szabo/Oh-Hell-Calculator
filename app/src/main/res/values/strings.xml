@@ -4,4 +4,5 @@
     <string name="players_number">players number</string>
     <string name="rounds_number">rounds number</string>
     <string name="button">play</string>
+    <string name="pn">player %d</string>
 </resources>
