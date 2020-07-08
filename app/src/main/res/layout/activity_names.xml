@@ -32,16 +32,7 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginBottom="0dp">
-
-                <TableRow
-                    android:id="@+id/tablerow"
-                    android:layout_width="fill_parent"
-                    android:layout_height="?android:attr/listPreferredItemHeight"
-                    android:focusable="true">
-
-                </TableRow>
-            </TableLayout>
+                android:layout_marginBottom="0dp"/>
         </ScrollView>
 
         <Button
