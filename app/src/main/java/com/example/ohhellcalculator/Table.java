@@ -10,6 +10,8 @@ import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowMetrics;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ public class Table extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
+        //setup names in first row
         TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerow_table, null);
         int playernum = Game.getInstance().getPlayernumber();
         for(int i = 0; i < playernum; i++) {
@@ -34,6 +37,11 @@ public class Table extends AppCompatActivity {
         }
         TableLayout tableLayout = findViewById(R.id.calculatortable);
         tableLayout.addView(tableRow);
+
+        LinearLayout buttonlayout = findViewById(R.id.buttonlayout);
+        Button button_0 = (Button) getLayoutInflater().inflate(R.layout.guess_button, null);
+        button_0.setText(String.format(getResources().getString(R.string.guessbutton), 0));
+        buttonlayout.addView(button_0);
 
     }
 }
