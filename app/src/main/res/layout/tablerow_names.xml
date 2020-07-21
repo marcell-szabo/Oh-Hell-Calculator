@@ -8,12 +8,12 @@ android:focusable="true" >
     android:layout_width="wrap_content"
     android:layout_column="0"
     android:layout_weight="1"
-    android:textColor="@color/colorPrimaryDark"  />
+    android:textColor="@android:color/darker_gray"  />
 
 <EditText
     android:id="@+id/tableCell2"
-    android:layout_width="wrap_content"
+    android:layout_width="0dp"
     android:layout_column="1"
     android:layout_weight="1"
-    android:textColor="@color/colorPrimaryDark"  />
+    android:textColor="@android:color/darker_gray"  />
 </TableRow>
