@@ -21,6 +21,6 @@ public class Player {
         if(guess == actual)
             points += base + guess * guessMultiplier;
         else
-            points -= (actual - guess) * guessMultiplier;
+            points -= Math.abs(actual - guess) * guessMultiplier;
     }
 }

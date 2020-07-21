@@ -31,6 +31,7 @@ public class Table extends AppCompatActivity {
     NestedScrollView nsw_rounds, nsw_table;
     NestedScrollView.OnScrollChangeListener nswl_rounds, nswl_table;
     Game g = Game.getInstance();
+    boolean endround = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,18 +153,24 @@ public class Table extends AppCompatActivity {
     }
     @SuppressLint("SetTextI18n")
     public void guessButton_click(View view) {
-        int playernum = g.getActualPlayer(), round = g.getActualRound();
-        if( !g.manageRound((int) view.getTag())) {
-            TextView guessText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 1);
-            Integer guess = (Integer) view.getTag();
-            guessText.setText(guess.toString());
-        } else {
-            TextView pointsText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 2);
-            Integer points = g.getPlayer(playernum).getPoints();
-            pointsText.setText(points.toString());
+        if(!endround) {
+            int playernum = g.getActualPlayer(), round = g.getActualRound();
+            RoundResult result = g.manageRound((int) view.getTag());
+            if( result == RoundResult.ADDGUESS) {
+                TextView guessText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 1);
+                Integer guess = (Integer) view.getTag();
+                guessText.setText(guess.toString());
+            } else if(result == RoundResult.ADDACTUAL || result == RoundResult.ENDROUND) {
+                TextView pointsText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 2);
+                Integer points = g.getPlayer(playernum).getPoints();
+                pointsText.setText(points.toString());
+                if(result == RoundResult.ENDROUND)
+                    endround = true;
+            }
         }
     }
     public void endRoundButton_click(View view) {
         addGuessButton(g.getActualRound());
+        endround = false;
     }
 }

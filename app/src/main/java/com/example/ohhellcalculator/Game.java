@@ -22,13 +22,16 @@ public class Game {
     public int getActualPlayer() { return actualPlayer; }
     public Player getPlayer(int i) { return players.get(i); }
 
-    public boolean manageRound(int guessOrActual) {
+    public RoundResult manageRound(int guessOrActual) {
         if (!addedguesses) {
             registerGuess(guessOrActual);
-            return false;
+            return RoundResult.ADDGUESS;
         } else {
             registerActual(guessOrActual);
-            return true;
+            if(!addedguesses)
+                return RoundResult.ENDROUND;
+            else
+                return RoundResult.ADDACTUAL;
         }
     }
     private void registerGuess(int guess) {
