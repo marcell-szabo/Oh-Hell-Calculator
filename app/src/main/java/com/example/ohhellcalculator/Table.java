@@ -151,7 +151,7 @@ public class Table extends AppCompatActivity {
         buttonlayout.addView(button);
     }
     @SuppressLint("SetTextI18n")
-    public void click(View view) {
+    public void guessButton_click(View view) {
         int playernum = g.getActualPlayer(), round = g.getActualRound();
         if( !g.manageRound((int) view.getTag())) {
             TextView guessText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 1);
@@ -162,6 +162,8 @@ public class Table extends AppCompatActivity {
             Integer points = g.getPlayer(playernum).getPoints();
             pointsText.setText(points.toString());
         }
-
+    }
+    public void endRoundButton_click(View view) {
+        addGuessButton(g.getActualRound());
     }
 }

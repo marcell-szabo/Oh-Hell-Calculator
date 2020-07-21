@@ -9,14 +9,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="588dp"
+            android:layout_height="582dp"
             android:layout_marginStart="50dp"
             android:layout_marginTop="50dp"
             android:layout_marginEnd="50dp"
@@ -31,12 +31,12 @@
                 android:fillViewport="true">
 
 
-                    <TableLayout
-                        android:id="@+id/roundtable"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                <TableLayout
+                    android:id="@+id/roundtable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-                    </TableLayout>
+                </TableLayout>
             </androidx.core.widget.NestedScrollView>
 
             <androidx.core.widget.NestedScrollView
@@ -52,12 +52,12 @@
                     android:layout_height="wrap_content">
 
 
-                        <TableLayout
-                            android:id="@+id/calculatortable"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                    <TableLayout
+                        android:id="@+id/calculatortable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                        </TableLayout>
+                    </TableLayout>
                 </HorizontalScrollView>
             </androidx.core.widget.NestedScrollView>
 
@@ -73,6 +73,13 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal" />
         </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="endRoundButton_click"
+            android:text="@string/endroundbutton" />
 
     </LinearLayout>
 

@@ -6,4 +6,5 @@
     <string name="button">play</string>
     <string name="pn">player %d</string>
     <string name="guessbutton">%d</string>
+    <string name="endroundbutton">End Round</string>
 </resources>
