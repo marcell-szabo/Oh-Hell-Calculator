@@ -21,6 +21,6 @@ public class Player {
         if(guess == actual)
             points += base + guess * guessMultiplier;
         else
-            points -= guess * guessMultiplier;
+            points -= (actual - guess) * guessMultiplier;
     }
 }
