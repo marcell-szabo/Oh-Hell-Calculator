@@ -1,11 +1,15 @@
 package com.example.ohhellcalculator;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.RequiresApi;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.TestLooperManager;
@@ -37,6 +41,7 @@ public class Table extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
+
         //setup names in first row
         TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerow_table, null);
         int playernum = g.getPlayernumber();
@@ -45,8 +50,7 @@ public class Table extends AppCompatActivity {
             textView.setText(g.getPlayerName(i));
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            float dp_to_px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
-            width = (displayMetrics.widthPixels - Math.round(dp_to_px)) / playernum;
+            width = (displayMetrics.widthPixels - Math.round(changeDpToPixel(50))) / playernum;
             textView.setWidth(width);
             textView.setMinWidth(300);
             TableRow.LayoutParams params = new TableRow.LayoutParams();
@@ -54,7 +58,6 @@ public class Table extends AppCompatActivity {
             tableRow.addView(textView, params);
         }
         tableLayout = findViewById(R.id.calculatortable);
-
         tableLayout.addView(tableRow);
 
         nswl_table = new NestedScrollView.OnScrollChangeListener() {
@@ -75,11 +78,34 @@ public class Table extends AppCompatActivity {
         for(int i = 0; i <= 1; i++)
             addGuessButton(i);
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Table.this);
+                builder.setTitle(R.string.dialogtitle)
+                        .setMessage(R.string.dialogmessage)
+                        .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                Table.this.finish();
+                            }
+                        })
+                        .setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
     private int changeDpToPixel(int dp) {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
-
     @SuppressLint("ResourceAsColor")
     private void addTableRow() {
         int roundsno = g.getNoOfRounds(), playernum = g.getPlayernumber();

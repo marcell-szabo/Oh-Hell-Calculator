@@ -7,4 +7,8 @@
     <string name="pn">player %d</string>
     <string name="guessbutton">%d</string>
     <string name="endroundbutton">End Round</string>
+    <string name="dialogtitle">End Game</string>
+    <string name="dialogmessage">Do you want to quit?</string>
+    <string name="OK">OK</string>
+    <string name="Cancel">Cancel</string>
 </resources>
