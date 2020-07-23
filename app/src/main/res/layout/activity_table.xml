@@ -8,8 +8,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_height="0dp"
+        android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -17,9 +17,9 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="582dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="50dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
             android:layout_marginBottom="0dp"
             android:baselineAligned="false">
 
@@ -27,7 +27,7 @@
                 android:id="@+id/nestedScrollViewForRounds"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.1"
+                android:layout_weight="0.05"
                 android:fillViewport="true">
 
 
@@ -43,7 +43,7 @@
                 android:id="@+id/nestedScrollViewForTable"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.9"
+                android:layout_weight="0.95"
                 android:fillViewport="true">
 
 
@@ -54,7 +54,7 @@
 
                     <TableLayout
                         android:id="@+id/calculatortable"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
                     </TableLayout>
@@ -74,12 +74,31 @@
                 android:orientation="horizontal" />
         </HorizontalScrollView>
 
-        <Button
-            android:id="@+id/button3"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="endRoundButton_click"
-            android:text="@string/endroundbutton" />
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/round_button"
+                android:onClick="endRoundButton_click"
+                android:text="\u2713" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/round_button"
+                android:onClick="undoButton_click"
+                android:text="\u21B6"
+                android:textSize="18sp" />
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -1,5 +1,7 @@
 package com.example.ohhellcalculator;
 
+import java.security.Policy;
+
 public class Player {
     private String name;
     private int guess, actual, points = 0;
@@ -23,4 +25,10 @@ public class Player {
         else
             points -= Math.abs(actual - guess) * guessMultiplier;
     }
+    public void reCalculatePoint() {
+        int pointsNow = points;
+        calculatePoint();
+        points -= 2 * (points - pointsNow);
+    }
+
 }

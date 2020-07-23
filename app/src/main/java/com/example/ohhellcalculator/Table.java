@@ -31,11 +31,12 @@ import android.widget.TextView;
 
 public class Table extends AppCompatActivity {
     TableLayout tableLayout;
-    int width, height;
+    int width;
     NestedScrollView nsw_rounds, nsw_table;
     NestedScrollView.OnScrollChangeListener nswl_rounds, nswl_table;
     Game g = Game.getInstance();
     boolean endround = false;
+    RoundResult lastResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +107,7 @@ public class Table extends AppCompatActivity {
     private int changeDpToPixel(int dp) {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
+
     @SuppressLint("ResourceAsColor")
     private void addTableRow() {
         int roundsno = g.getNoOfRounds(), playernum = g.getPlayernumber();
@@ -136,6 +138,7 @@ public class Table extends AppCompatActivity {
         }
 
     }
+
     private void addRoundsNum() {
         TableLayout roundtable = findViewById(R.id.roundtable);
         TableRow firstroundtableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerow_table, null);
@@ -168,6 +171,7 @@ public class Table extends AppCompatActivity {
         nsw_rounds = findViewById(R.id.nestedScrollViewForRounds);
         nsw_rounds.setOnScrollChangeListener(nswl_rounds);
     }
+
     private void addGuessButton(int i) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.guess_button, null);
@@ -177,26 +181,43 @@ public class Table extends AppCompatActivity {
         LinearLayout buttonlayout = findViewById(R.id.buttonlayout);
         buttonlayout.addView(button);
     }
+
     @SuppressLint("SetTextI18n")
     public void guessButton_click(View view) {
         if(!endround) {
             int playernum = g.getActualPlayer(), round = g.getActualRound();
-            RoundResult result = g.manageRound((int) view.getTag());
-            if( result == RoundResult.ADDGUESS) {
+            lastResult = g.manageRound((int) view.getTag());
+            if( lastResult == RoundResult.ADDGUESS) {
                 TextView guessText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 1);
                 Integer guess = (Integer) view.getTag();
                 guessText.setText(guess.toString());
-            } else if(result == RoundResult.ADDACTUAL || result == RoundResult.ENDROUND) {
+            } else if(lastResult == RoundResult.ADDACTUAL || lastResult == RoundResult.ENDROUND) {
                 TextView pointsText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 2);
                 Integer points = g.getPlayer(playernum).getPoints();
                 pointsText.setText(points.toString());
-                if(result == RoundResult.ENDROUND)
+                if(lastResult == RoundResult.ENDROUND)
                     endround = true;
             }
         }
     }
+
     public void endRoundButton_click(View view) {
-        addGuessButton(g.getActualRound());
-        endround = false;
+        if(endround) {
+            addGuessButton(g.getActualRound());
+            endround = false;
+        }
     }
+
+    public void undoButton_click(View view) {
+        g.undo();
+        int playernum = g.getActualPlayer(), round = g.getActualRound();
+        if(lastResult == RoundResult.ADDGUESS) {
+            TextView guessText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 1);
+            guessText.setText("");
+        } else if(lastResult == RoundResult.ADDACTUAL) {
+            TextView pointsText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 2);
+            pointsText.setText("");
+        }
+    }
+
 }

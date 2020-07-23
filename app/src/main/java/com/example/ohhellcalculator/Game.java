@@ -54,4 +54,19 @@ public class Game {
         else
             actualPlayer++;
     }
+
+    public void undo() {
+        if(!addedguesses) {
+            if(actualPlayer != 0)
+                actualPlayer--;
+        } else {
+            if(actualPlayer == 0) {
+                actualPlayer = players.size() - 1;
+                addedguesses = false;
+            } else {
+                actualPlayer--;
+                players.get(actualPlayer).reCalculatePoint();
+            }
+        }
+    }
 }
