@@ -51,6 +51,7 @@
                     android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:ems="10"
+                    android:backgroundTint="@color/lavender"
                     android:inputType="number" />
             </TableRow>
 
@@ -70,7 +71,8 @@
                     android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:ems="10"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:backgroundTint="@color/lavender" />
 
             </TableRow>
 

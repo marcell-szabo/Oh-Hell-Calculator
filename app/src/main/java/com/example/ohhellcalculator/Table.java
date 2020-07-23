@@ -29,6 +29,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
+
 public class Table extends AppCompatActivity {
     TableLayout tableLayout;
     int width;
@@ -180,6 +182,9 @@ public class Table extends AppCompatActivity {
         button.setText(getString(R.string.guessbutton, i));
         LinearLayout buttonlayout = findViewById(R.id.buttonlayout);
         buttonlayout.addView(button);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) button.getLayoutParams();
+        params.width = changeDpToPixel(50);
+        button.setLayoutParams(params);
     }
 
     @SuppressLint("SetTextI18n")
