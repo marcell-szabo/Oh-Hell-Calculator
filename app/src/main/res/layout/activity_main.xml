@@ -13,6 +13,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="100dp"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,9 +51,11 @@
                     android:layout_width="169dp"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
-                    android:ems="10"
                     android:backgroundTint="@color/lavender"
-                    android:inputType="number" />
+                    android:textColor="@color/darklavender"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:textCursorDrawable="@drawable/lavender_cursor" />
             </TableRow>
 
             <TableRow
@@ -70,9 +73,11 @@
                     android:layout_width="169dp"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
+                    android:backgroundTint="@color/lavender"
+                    android:textColor="@color/darklavender"
                     android:ems="10"
                     android:inputType="number"
-                    android:backgroundTint="@color/lavender" />
+                    android:textCursorDrawable="@drawable/lavender_cursor" />
 
             </TableRow>
 
@@ -80,10 +85,12 @@
 
         <Button
             android:id="@+id/button2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:background="@drawable/borderbutton"
             android:onClick="play"
-            android:text="@string/button" />
+            android:text="@string/button"
+            android:textColor="@color/darklavender" />
 
     </LinearLayout>
 

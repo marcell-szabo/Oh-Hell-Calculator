@@ -55,18 +55,30 @@ public class Game {
             actualPlayer++;
     }
 
-    public void undo() {
+    public UndoResult undo() {
         if(!addedguesses) {
-            if(actualPlayer != 0)
+            if(actualPlayer != 0) {
                 actualPlayer--;
+                return UndoResult.FIRST;
+            }
+            else if (actualPlayer == 0 && actualRound != 1) {
+                actualPlayer = players.size() - 1;
+                actualRound--;
+                addedguesses = true;
+                players.get(actualPlayer).reCalculatePoint();
+                return UndoResult.CHANGE_ENDROUND;
+            }
         } else {
             if(actualPlayer == 0) {
                 actualPlayer = players.size() - 1;
                 addedguesses = false;
+                return UndoResult.FIRST;
             } else {
                 actualPlayer--;
                 players.get(actualPlayer).reCalculatePoint();
+                return UndoResult.SECOND;
             }
         }
+        return null;
     }
 }

@@ -4,5 +4,6 @@
     android:layout_width="10dp"
     android:layout_height="match_parent"
     android:onClick="guessButton_click"
-    android:background="@drawable/borderbutton">
+    android:background="@drawable/borderbutton"
+    android:textColor="@color/darklavender">
 </Button>

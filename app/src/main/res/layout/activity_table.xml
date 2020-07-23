@@ -87,6 +87,7 @@
                 android:layout_marginRight="10dp"
                 android:background="@drawable/round_button"
                 android:onClick="endRoundButton_click"
+                android:textColor="@color/darklavender"
                 android:text="\u2713" />
 
             <Button
@@ -97,6 +98,7 @@
                 android:background="@drawable/round_button"
                 android:onClick="undoButton_click"
                 android:text="\u21B6"
+                android:textColor="@color/darklavender"
                 android:textSize="18sp" />
         </LinearLayout>
 

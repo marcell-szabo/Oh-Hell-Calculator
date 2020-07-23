@@ -214,15 +214,17 @@ public class Table extends AppCompatActivity {
     }
 
     public void undoButton_click(View view) {
-        g.undo();
+        UndoResult result = g.undo();
         int playernum = g.getActualPlayer(), round = g.getActualRound();
-        if(lastResult == RoundResult.ADDGUESS) {
+        if(result == UndoResult.FIRST) {
             TextView guessText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 1);
             guessText.setText("");
-        } else if(lastResult == RoundResult.ADDACTUAL) {
+        } else {
             TextView pointsText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 2);
             pointsText.setText("");
         }
+        if(result == UndoResult.CHANGE_ENDROUND)
+            endround = false;
     }
 
 }

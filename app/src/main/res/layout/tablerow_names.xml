@@ -14,5 +14,8 @@ android:focusable="true" >
     android:layout_width="0dp"
     android:layout_column="1"
     android:layout_weight="1"
-    android:backgroundTint="@color/lavender"/>
+    android:backgroundTint="@color/lavender"
+    android:textCursorDrawable="@drawable/lavender_cursor"
+    android:textColor="@color/darklavender"
+    />
 </TableRow>
