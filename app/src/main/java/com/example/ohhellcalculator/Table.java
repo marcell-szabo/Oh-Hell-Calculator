@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.TestLooperManager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import com.google.android.material.button.MaterialButton;
 
 public class Table extends AppCompatActivity {
     TableLayout tableLayout;
+    LinearLayout buttonLayout;
     int width;
     HorizontalScrollView hsw_names, hsw_table;
     NestedScrollView nsw_rounds, nsw_table;
@@ -47,63 +49,11 @@ public class Table extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
 
-        //setup names in first row
-        LinearLayout namesLayout = findViewById(R.id.namesLayout);
-        int playernum = g.getPlayernumber();
-
-        TextView firsttextView = new TextView(getApplicationContext());
-        firsttextView.setText(g.getPlayerName(0));
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        width = (displayMetrics.widthPixels - Math.round(changeDpToPixel(60))) / playernum;
-        firsttextView.setWidth(width);
-        firsttextView.setMinWidth(300);
-        firsttextView.setPadding(changeDpToPixel(15),0,0,0);
-        namesLayout.addView(firsttextView);
-        for(int i = 1; i < playernum; i++) {
-            TextView textView = new TextView(getApplicationContext());
-            textView.setText(g.getPlayerName(i));
-            textView.setWidth(width);
-            //textView.setMinWidth(300);
-            namesLayout.addView(textView);
-        }
-        hswl_names = new HorizontalScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                hsw_table.setOnScrollChangeListener(null);
-                hsw_table.scrollTo(i,i1);
-                hsw_table.setOnScrollChangeListener(hswl_table);
-            }
-        };
-        hsw_names = findViewById(R.id.horizontalScrollViewForNames);
-        hsw_names.setOnScrollChangeListener(hswl_names);
-
-        tableLayout = findViewById(R.id.calculatortable);
-        nswl_table = new NestedScrollView.OnScrollChangeListener() {
-
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                nsw_rounds.setOnScrollChangeListener((View.OnScrollChangeListener) null);
-                nsw_rounds.scrollTo(scrollX, scrollY);
-                nsw_rounds.setOnScrollChangeListener(nswl_rounds); //SET SCROLL LISTENER AGAIN
-            }
-        };
-        nsw_table = findViewById(R.id.nestedScrollViewForTable);
-        nsw_table.setOnScrollChangeListener(nswl_table);
-
-        hswl_table = new HorizontalScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                hsw_names.setOnScrollChangeListener(null);
-                hsw_names.scrollTo(i, i1);
-                hsw_names.setOnScrollChangeListener(hswl_names);
-            }
-        };
-        hsw_table = findViewById(R.id.horizontalScrollViewForTable);
-        hsw_table.setOnScrollChangeListener(hswl_table);
+        addNames();
         addTableRow();
         addRoundsNum();
 
+        buttonLayout = findViewById(R.id.buttonlayout);
         for(int i = 0; i <= 1; i++)
             addGuessButton(i);
 
@@ -132,39 +82,94 @@ public class Table extends AppCompatActivity {
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
     }
+
     private int changeDpToPixel(int dp) {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
 
+    private void addNames() {
+        LinearLayout namesLayout = findViewById(R.id.namesLayout);
+        int playernum = g.getPlayernumber();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        width = (displayMetrics.widthPixels - Math.round(changeDpToPixel(60))) / playernum;
+        for(int i = 0; i < playernum; i++) {
+            TextView textView = new TextView(getApplicationContext());
+            textView.setText(g.getPlayerName(i));
+            textView.setWidth(width);
+            if(i == 0) {
+                textView.setPadding(changeDpToPixel(30), 0,0,0);
+                textView.setMinWidth(changeDpToPixel(85));
+            } else {
+                textView.setPadding(changeDpToPixel(15),0,0,0);
+                textView.setMinWidth(changeDpToPixel(70));
+            }
+            namesLayout.addView(textView);
+        }
+        hswl_names = new HorizontalScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                hsw_table.setOnScrollChangeListener(null);
+                hsw_table.scrollTo(i,i1);
+                hsw_table.setOnScrollChangeListener(hswl_table);
+            }
+        };
+        hsw_names = findViewById(R.id.horizontalScrollViewForNames);
+        hsw_names.setOnScrollChangeListener(hswl_names);
+    }
+
     @SuppressLint("ResourceAsColor")
     private void addTableRow() {
+        tableLayout = findViewById(R.id.calculatortable);
+
         int roundsno = g.getNoOfRounds(), playernum = g.getPlayernumber();
         roundsno += roundsno - 1;
         for(int i = 1; i <= roundsno; i++) {
             TableRow pointsRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerow_table, null);
             for(int j = 1; j <= playernum; j++) {
-                TextView guessText = new EditText(getApplicationContext());
-                guessText.setTag(i * 100 + j * 10 + 1);
-                guessText.setMinWidth(100);
-                guessText.setWidth(width / 3);
-                guessText.setFocusable(false);
-                guessText.setClickable(false);
-                guessText.setEnabled(false);
-                guessText.setBackgroundColor(android.R.color.transparent);
-                pointsRow.addView(guessText);
-                TextView pointText = new EditText(getApplicationContext());
-                pointText.setTag(i * 100 + j * 10 + 2);
-                pointText.setMinWidth(200);
-                pointText.setWidth(2 * width / 3);
-                pointText.setEnabled(false);
-                pointText.setFocusable(false);
-                pointText.setClickable(false);
-                pointText.setBackgroundColor(android.R.color.transparent);
-                pointsRow.addView(pointText);
+                for(int k = 1; k <= 2; k++) {
+                    TextView textView = new EditText(getApplicationContext());
+                    textView.setTag(i * 100 + j * 10 + k);
+                    //guessText.setMinWidth(300);
+                    textView.setWidth(changeDpToPixel(35));
+                    if(k == 1) {
+                        textView.setGravity(Gravity.RIGHT);
+                        textView.setPadding(0,changeDpToPixel(15),changeDpToPixel(5),0);
+                    } else {
+                        textView.setGravity(Gravity.LEFT);
+                        textView.setPadding(changeDpToPixel(5),changeDpToPixel(15),0,0);
+                    }
+                    textView.setFocusable(false);
+                    textView.setClickable(false);
+                    textView.setEnabled(false);
+                    textView.setBackgroundColor(android.R.color.transparent);
+                    pointsRow.addView(textView);
+                }
             }
             tableLayout.addView(pointsRow);
         }
+        nswl_table = new NestedScrollView.OnScrollChangeListener() {
 
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                nsw_rounds.setOnScrollChangeListener((View.OnScrollChangeListener) null);
+                nsw_rounds.scrollTo(scrollX, scrollY);
+                nsw_rounds.setOnScrollChangeListener(nswl_rounds); //SET SCROLL LISTENER AGAIN
+            }
+        };
+        nsw_table = findViewById(R.id.nestedScrollViewForTable);
+        nsw_table.setOnScrollChangeListener(nswl_table);
+
+        hswl_table = new HorizontalScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                hsw_names.setOnScrollChangeListener(null);
+                hsw_names.scrollTo(i, i1);
+                hsw_names.setOnScrollChangeListener(hswl_names);
+            }
+        };
+        hsw_table = findViewById(R.id.horizontalScrollViewForTable);
+        hsw_table.setOnScrollChangeListener(hswl_table);
     }
 
     private void addRoundsNum() {
@@ -173,7 +178,7 @@ public class Table extends AppCompatActivity {
         for(int i = 1; i <= (2 * roundsno - 1); i++) {
             TableRow roundtableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerow_table, null);
             TextView textView = new TextView(getApplicationContext());
-            textView.setPadding(0, changeDpToPixel(27), 0,0);
+            textView.setPadding(0, changeDpToPixel(20), 0,0);
             if(i > roundsno)
                 textView.setText(getString(R.string.guessbutton, roundsno - (i - roundsno)));
             else
@@ -199,8 +204,7 @@ public class Table extends AppCompatActivity {
         Button button = v.findViewById(R.id.guessbutton);
         button.setTag(i);
         button.setText(getString(R.string.guessbutton, i));
-        LinearLayout buttonlayout = findViewById(R.id.buttonlayout);
-        buttonlayout.addView(button);
+        buttonLayout.addView(button);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) button.getLayoutParams();
         params.width = changeDpToPixel(50);
         button.setLayoutParams(params);
@@ -226,10 +230,15 @@ public class Table extends AppCompatActivity {
     }
 
     public void endRoundButton_click(View view) {
-        if(endround) {
+        int roundsno = g.getNoOfRounds(), actualround = g.getActualRound();
+        if(endround && roundsno >= actualround) {
             addGuessButton(g.getActualRound());
-            endround = false;
+        } else if(endround) {
+            Button button = buttonLayout.findViewWithTag(roundsno - (actualround -1 - roundsno));
+            buttonLayout.removeView(button);
         }
+        if(2 * roundsno - 1 >= actualround)
+            endround = false;
     }
 
     public void undoButton_click(View view) {
