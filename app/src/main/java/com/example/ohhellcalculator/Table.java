@@ -210,6 +210,12 @@ public class Table extends AppCompatActivity {
         button.setLayoutParams(params);
     }
 
+    private void removeGuessButton(int i) {
+        Button button = buttonLayout.findViewWithTag(i);
+        if(buttonLayout != null)
+            buttonLayout.removeView(button);
+    }
+
     @SuppressLint("SetTextI18n")
     public void guessButton_click(View view) {
         if(!endround) {
@@ -234,8 +240,7 @@ public class Table extends AppCompatActivity {
         if(endround && roundsno >= actualround) {
             addGuessButton(g.getActualRound());
         } else if(endround) {
-            Button button = buttonLayout.findViewWithTag(roundsno - (actualround -1 - roundsno));
-            buttonLayout.removeView(button);
+            removeGuessButton(roundsno - (actualround -1 - roundsno));
         }
         if(2 * roundsno - 1 >= actualround)
             endround = false;
@@ -251,8 +256,14 @@ public class Table extends AppCompatActivity {
             TextView pointsText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 2);
             pointsText.setText("");
         }
-        if(result == UndoResult.CHANGE_ENDROUND)
+        if(result == UndoResult.CHANGE_ENDROUND) {
             endround = false;
+            int roundsno = g.getNoOfRounds(), actualround = g.getActualRound();
+            if(roundsno > actualround)
+                removeGuessButton(actualround + 1);
+            else
+                addGuessButton(roundsno - (actualround - roundsno));
+        }
     }
 
 }
