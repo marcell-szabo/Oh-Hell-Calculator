@@ -45,7 +45,7 @@
                 android:id="@+id/nestedScrollViewForRounds"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.05"
+                android:layout_weight="0.1"
                 android:fillViewport="true">
 
 
@@ -61,7 +61,7 @@
                 android:id="@+id/nestedScrollViewForTable"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.7"
+                android:layout_weight="0.9"
                 android:fillViewport="true">
 
 

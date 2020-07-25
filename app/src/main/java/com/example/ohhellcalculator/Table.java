@@ -88,10 +88,10 @@ public class Table extends AppCompatActivity {
             textView.setText(g.getPlayerName(i));
             textView.setWidth(width);
             if(i == 0) {
-                textView.setPadding(changeDpToPixel(30), 0,0,0);
+                textView.setPadding(changeDpToPixel(40), 0,0,0);
                 textView.setMinWidth(changeDpToPixel(85));
             } else {
-                textView.setPadding(changeDpToPixel(15),0,0,0);
+                textView.setPadding(changeDpToPixel(25),0,0,0);
                 textView.setMinWidth(changeDpToPixel(70));
             }
             namesLayout.addView(textView);
