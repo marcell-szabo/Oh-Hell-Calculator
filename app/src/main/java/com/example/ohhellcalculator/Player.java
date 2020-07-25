@@ -12,6 +12,7 @@ public class Player {
     }
     public String getName() { return name; }
     public int getPoints() { return points; }
+    public int getGuess() { return guess; }
 
     public void addGuess(int guess) {
         this.guess = guess;

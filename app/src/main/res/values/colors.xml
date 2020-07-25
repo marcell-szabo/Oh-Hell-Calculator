@@ -5,4 +5,7 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="lavender">#dcd0ff</color>>
     <color name="darklavender">#734F96</color>
+    <color name="equalsGreen">#A4C630</color>
+    <color name="fightRed">@android:color/holo_red_dark</color>
+    <color name="scatterYellow">#F0E68C</color>
 </resources>

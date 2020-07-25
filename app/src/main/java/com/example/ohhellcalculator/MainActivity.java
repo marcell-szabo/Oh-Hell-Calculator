@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
     public void play(View view) {
         EditText etplayernum = (EditText) findViewById(R.id. editTextPlayerNum);
         EditText etroundsnum = (EditText) findViewById(R.id.editTextRoundsNum);

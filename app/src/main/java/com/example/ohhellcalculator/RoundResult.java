@@ -1,5 +1,5 @@
 package com.example.ohhellcalculator;
 
 public enum RoundResult {
-    ADDGUESS, ADDACTUAL, ENDROUND
+    ADDGUESS, LASTADDEDGUESS, ADDACTUAL, ENDROUND
 }

@@ -1,8 +1,6 @@
 package com.example.ohhellcalculator;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.RequiresApi;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
@@ -10,39 +8,31 @@ import androidx.core.widget.NestedScrollView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.os.TestLooperManager;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.WindowMetrics;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.google.android.material.button.MaterialButton;
-
 public class Table extends AppCompatActivity {
-    TableLayout tableLayout;
-    LinearLayout buttonLayout;
-    int width;
-    HorizontalScrollView hsw_names, hsw_table;
-    NestedScrollView nsw_rounds, nsw_table;
-    NestedScrollView.OnScrollChangeListener nswl_rounds, nswl_table, nswl_names;
-    HorizontalScrollView.OnScrollChangeListener hswl_table, hswl_names;
+    private TableLayout tableLayout, roundtable;
+    private LinearLayout buttonLayout;
+    private int width;
+    private HorizontalScrollView hsw_names, hsw_table;
+    private NestedScrollView nsw_rounds, nsw_table;
+    private NestedScrollView.OnScrollChangeListener nswl_rounds, nswl_table, nswl_names;
+    private HorizontalScrollView.OnScrollChangeListener hswl_table, hswl_names;
     Game g = Game.getInstance();
-    boolean endround = false;
-    RoundResult lastResult;
+    private boolean endround = false;
+    private RoundResult lastResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,12 +163,14 @@ public class Table extends AppCompatActivity {
     }
 
     private void addRoundsNum() {
-        TableLayout roundtable = findViewById(R.id.roundtable);
+        roundtable = findViewById(R.id.roundtable);
         int roundsno = g.getNoOfRounds();
         for(int i = 1; i <= (2 * roundsno - 1); i++) {
             TableRow roundtableRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerow_table, null);
             TextView textView = new TextView(getApplicationContext());
-            textView.setPadding(0, changeDpToPixel(20), 0,0);
+            textView.setTag(i);
+            textView.setGravity(Gravity.CENTER_HORIZONTAL);
+            textView.setPadding(changeDpToPixel(5), changeDpToPixel(10), changeDpToPixel(5), changeDpToPixel(10));
             if(i > roundsno)
                 textView.setText(getString(R.string.guessbutton, roundsno - (i - roundsno)));
             else
@@ -221,10 +213,22 @@ public class Table extends AppCompatActivity {
         if(!endround) {
             int playernum = g.getActualPlayer(), round = g.getActualRound();
             lastResult = g.manageRound((int) view.getTag());
-            if( lastResult == RoundResult.ADDGUESS) {
+            if( lastResult == RoundResult.ADDGUESS || lastResult == RoundResult.LASTADDEDGUESS) {
                 TextView guessText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 1);
                 Integer guess = (Integer) view.getTag();
                 guessText.setText(guess.toString());
+                if(lastResult == RoundResult.LASTADDEDGUESS) {
+                    View v = roundtable.findViewWithTag(g.getRealActualRound());
+                    GuessesNo guessResult = g.resultOfGuessing();
+                    v.setBackgroundResource(R.drawable.border_textview);
+                    GradientDrawable mygrad = mygrad = (GradientDrawable)v.getBackground();
+                    if(guessResult == GuessesNo.FIGHT)
+                        mygrad.setStroke(changeDpToPixel(3), getColor(R.color.fightRed));
+                    else if(guessResult == GuessesNo.SCATTER)
+                        mygrad.setStroke(changeDpToPixel(3),getColor(R.color.scatterYellow));
+                    else
+                        mygrad.setStroke(changeDpToPixel(3), getColor(R.color.equalsGreen));
+                }
             } else if(lastResult == RoundResult.ADDACTUAL || lastResult == RoundResult.ENDROUND) {
                 TextView pointsText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 2);
                 Integer points = g.getPlayer(playernum).getPoints();
@@ -252,6 +256,8 @@ public class Table extends AppCompatActivity {
         if(result == UndoResult.FIRST) {
             TextView guessText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 1);
             guessText.setText("");
+            View v = roundtable.findViewWithTag(g.getRealActualRound());
+            v.setBackground(null);
         } else {
             TextView pointsText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 2);
             pointsText.setText("");
