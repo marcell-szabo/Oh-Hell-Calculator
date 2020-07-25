@@ -48,7 +48,7 @@ public class Game {
     public GuessesNo resultOfGuessing() {
         int sum = 0;
         for (Player i: players)
-            sum += i.getGuess();
+            sum += i.getGuesses();
         if(sum > getRealActualRound())
             return GuessesNo.FIGHT;
         else if (sum == getRealActualRound())
@@ -82,7 +82,7 @@ public class Game {
     * @parameter guess - guess to be registered
     * */
     private void registerGuess(int guess) {
-        players.get(actualPlayer).addGuess(guess);
+        players.get(actualPlayer).addGuess(guess, actualRound);
         //if the actualplayer is the last one, then the next actualplayer becomes the first one,
         // and the addedguesses flag becomes true
         if(actualPlayer == (players.size() - 1)) {
@@ -97,8 +97,8 @@ public class Game {
     * @parameter actual - actual score of the player
     * */
     private void registerActual(int actual) {
-        players.get(actualPlayer).addActual(actual);
-        players.get(actualPlayer).calculatePoint();
+        players.get(actualPlayer).addActual(actual, actualRound);
+        players.get(actualPlayer).calculatePoint(actualRound);
         if(actualPlayer == players.size() - 1) {
             actualPlayer = 0;
             addedguesses = false;
@@ -124,7 +124,7 @@ public class Game {
                 actualPlayer = players.size() - 1;
                 actualRound--;
                 addedguesses = true;
-                players.get(actualPlayer).reCalculatePoint();
+                players.get(actualPlayer).reCalculatePoint(actualRound);
                 return UndoResult.CHANGE_ENDROUND;
             }
         }
@@ -138,7 +138,7 @@ public class Game {
                 return UndoResult.FIRST;
             } else {
                 actualPlayer--;
-                players.get(actualPlayer).reCalculatePoint();
+                players.get(actualPlayer).reCalculatePoint(actualRound);
                 return UndoResult.SECOND;
             }
         }

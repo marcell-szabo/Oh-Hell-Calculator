@@ -22,18 +22,28 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+/*
+* Activity of Calculator
+* */
 public class Table extends AppCompatActivity {
     private TableLayout tableLayout, roundtable;
     private LinearLayout buttonLayout;
+    //width of cells
     private int width;
     private HorizontalScrollView hsw_names, hsw_table;
+    private HorizontalScrollView.OnScrollChangeListener hswl_table, hswl_names;
     private NestedScrollView nsw_rounds, nsw_table;
     private NestedScrollView.OnScrollChangeListener nswl_rounds, nswl_table, nswl_names;
-    private HorizontalScrollView.OnScrollChangeListener hswl_table, hswl_names;
+    //Singleton Game instance
     Game g = Game.getInstance();
+    //endround flag, it is false when a round is happening and true if it is completed
     private boolean endround = false;
+    //Result of the round of guessing and scoring
     private RoundResult lastResult;
 
+    /*
+    * Callback function, it is executed when the activity is created
+    * */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,13 +53,19 @@ public class Table extends AppCompatActivity {
         addTableRow();
         addRoundsNum();
 
+        //Adds guessbuttons to layout
         buttonLayout = findViewById(R.id.buttonlayout);
         for(int i = 0; i <= 1; i++)
             addGuessButton(i);
 
+        /*
+        *when back is pressed, the app does not go back on screen (Names activity), but asks if you
+        * would like to quit the current game, if yes it goes back to MainActivity
+        * */
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                //builds Dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(Table.this);
                 builder.setTitle(R.string.dialogtitle)
                         .setMessage(R.string.dialogmessage)
@@ -73,10 +89,17 @@ public class Table extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
+    /*
+    * Helper function, the received number which is dp-s is converted to px
+    * @param dp - dp to be converted
+    * */
     private int changeDpToPixel(int dp) {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
 
+    /*
+    * Add names to the corresponding layout
+    * */
     private void addNames() {
         LinearLayout namesLayout = findViewById(R.id.namesLayout);
         int playernum = g.getPlayernumber();
@@ -96,6 +119,7 @@ public class Table extends AppCompatActivity {
             }
             namesLayout.addView(textView);
         }
+        // setup of synced scrolling between Table and Names
         hswl_names = new HorizontalScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View view, int i, int i1, int i2, int i3) {
@@ -108,6 +132,9 @@ public class Table extends AppCompatActivity {
         hsw_names.setOnScrollChangeListener(hswl_names);
     }
 
+    /*
+    * Adds rows to the Table, which contains the data of all players.
+    * */
     @SuppressLint("ResourceAsColor")
     private void addTableRow() {
         tableLayout = findViewById(R.id.calculatortable);
@@ -138,6 +165,7 @@ public class Table extends AppCompatActivity {
             }
             tableLayout.addView(pointsRow);
         }
+        //setup of synced scrolling of Table and Rounds
         nswl_table = new NestedScrollView.OnScrollChangeListener() {
 
             @Override
@@ -150,6 +178,7 @@ public class Table extends AppCompatActivity {
         nsw_table = findViewById(R.id.nestedScrollViewForTable);
         nsw_table.setOnScrollChangeListener(nswl_table);
 
+        //setup of synced scrolling of Table and Names
         hswl_table = new HorizontalScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View view, int i, int i1, int i2, int i3) {
@@ -162,6 +191,9 @@ public class Table extends AppCompatActivity {
         hsw_table.setOnScrollChangeListener(hswl_table);
     }
 
+    /*
+    * Adds rounds to the corresponding layout
+    * */
     private void addRoundsNum() {
         roundtable = findViewById(R.id.roundtable);
         int roundsno = g.getNoOfRounds();
@@ -178,6 +210,7 @@ public class Table extends AppCompatActivity {
             roundtableRow.addView(textView);
             roundtable.addView(roundtableRow);
         }
+        //setup of synced scrolling of Rounds and Table
         nswl_rounds = new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -190,6 +223,10 @@ public class Table extends AppCompatActivity {
         nsw_rounds.setOnScrollChangeListener(nswl_rounds);
     }
 
+    /*
+    * Adds a guessbutton to the corresponding layout
+    * @param i - number of the button (equals guess)
+    * */
     private void addGuessButton(int i) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.guess_button, null);
@@ -202,21 +239,31 @@ public class Table extends AppCompatActivity {
         button.setLayoutParams(params);
     }
 
+    /*
+    * Deletes a guessbutton from the corresponding layout
+    * @param i - number (tag) of the button
+    * */
     private void removeGuessButton(int i) {
         Button button = buttonLayout.findViewWithTag(i);
         if(buttonLayout != null)
             buttonLayout.removeView(button);
     }
 
+    /*
+    * OnClick listener for guessbuttons
+    * */
     @SuppressLint("SetTextI18n")
     public void guessButton_click(View view) {
         if(!endround) {
             int playernum = g.getActualPlayer(), round = g.getActualRound();
             lastResult = g.manageRound((int) view.getTag());
+            //if round is at the guessing phase the first cell gets updated
             if( lastResult == RoundResult.ADDGUESS || lastResult == RoundResult.LASTADDEDGUESS) {
                 TextView guessText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 1);
                 Integer guess = (Integer) view.getTag();
                 guessText.setText(guess.toString());
+
+                //coloring of roundnumber based on the sum of the guesses
                 if(lastResult == RoundResult.LASTADDEDGUESS) {
                     View v = roundtable.findViewWithTag(g.getRealActualRound());
                     GuessesNo guessResult = g.resultOfGuessing();
@@ -229,7 +276,9 @@ public class Table extends AppCompatActivity {
                     else
                         mygrad.setStroke(changeDpToPixel(3), getColor(R.color.equalsGreen));
                 }
-            } else if(lastResult == RoundResult.ADDACTUAL || lastResult == RoundResult.ENDROUND) {
+            }
+            //if round is in the actual scoring phase the second cell gets updated
+            else if(lastResult == RoundResult.ADDACTUAL || lastResult == RoundResult.ENDROUND) {
                 TextView pointsText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 2);
                 Integer points = g.getPlayer(playernum).getPoints();
                 pointsText.setText(points.toString());
@@ -239,6 +288,9 @@ public class Table extends AppCompatActivity {
         }
     }
 
+    /*
+    * OnClick listener for endround button(tick symbol)
+    * */
     public void endRoundButton_click(View view) {
         int roundsno = g.getNoOfRounds(), actualround = g.getActualRound();
         if(endround && roundsno >= actualround) {
@@ -250,6 +302,9 @@ public class Table extends AppCompatActivity {
             endround = false;
     }
 
+    /*
+    * OnClick listener for undo button (backward arrow symbol)
+    * */
     public void undoButton_click(View view) {
         UndoResult result = g.undo();
         int playernum = g.getActualPlayer(), round = g.getActualRound();
