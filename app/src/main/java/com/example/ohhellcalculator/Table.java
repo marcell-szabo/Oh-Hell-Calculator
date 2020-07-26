@@ -265,7 +265,7 @@ public class Table extends AppCompatActivity {
 
                 //coloring of roundnumber based on the sum of the guesses
                 if(lastResult == RoundResult.LASTADDEDGUESS) {
-                    View v = roundtable.findViewWithTag(g.getRealActualRound());
+                    View v = roundtable.findViewWithTag(g.getActualRound());
                     GuessesNo guessResult = g.resultOfGuessing();
                     v.setBackgroundResource(R.drawable.border_textview);
                     GradientDrawable mygrad = mygrad = (GradientDrawable)v.getBackground();
@@ -295,7 +295,7 @@ public class Table extends AppCompatActivity {
         int roundsno = g.getNoOfRounds(), actualround = g.getActualRound();
         if(endround && roundsno >= actualround) {
             addGuessButton(g.getActualRound());
-        } else if(endround) {
+        } else if(endround && g.getRealActualRound() != 0) {
             removeGuessButton(roundsno - (actualround -1 - roundsno));
         }
         if(2 * roundsno - 1 >= actualround)
@@ -311,19 +311,21 @@ public class Table extends AppCompatActivity {
         if(result == UndoResult.FIRST) {
             TextView guessText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 1);
             guessText.setText("");
-            View v = roundtable.findViewWithTag(g.getRealActualRound());
+            View v = roundtable.findViewWithTag(g.getActualRound());
             v.setBackground(null);
         } else {
             TextView pointsText = tableLayout.findViewWithTag(round * 100 + (playernum + 1) * 10 + 2);
             pointsText.setText("");
         }
         if(result == UndoResult.CHANGE_ENDROUND) {
-            endround = false;
             int roundsno = g.getNoOfRounds(), actualround = g.getActualRound();
             if(roundsno > actualround)
                 removeGuessButton(actualround + 1);
-            else
-                addGuessButton(roundsno - (actualround - roundsno));
+            else {
+                if(!endround)
+                    addGuessButton(roundsno - (actualround - roundsno));
+            }
+            endround = false;
         }
     }
 
