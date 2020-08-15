@@ -55,9 +55,12 @@ public class Table extends AppCompatActivity {
 
         //Adds guessbuttons to layout
         buttonLayout = findViewById(R.id.buttonlayout);
-        for(int i = 0; i <= 1; i++)
-            addGuessButton(i);
-
+        if(savedInstanceState == null) {
+            for (int i = 0; i <= 1; i++)
+                addGuessButton(i);
+        } else
+            for(int i = 0; i <= g.getRealActualRound(); i++)
+                addGuessButton(i);
         /*
         *when back is pressed, the app does not go back on screen (Names activity), but asks if you
         * would like to quit the current game, if yes it goes back to MainActivity
@@ -73,6 +76,7 @@ public class Table extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
+                                g.clear();
                                 Table.this.finish();
                             }
                         })
@@ -102,7 +106,7 @@ public class Table extends AppCompatActivity {
     * */
     private void addNames() {
         LinearLayout namesLayout = findViewById(R.id.namesLayout);
-        int playernum = g.getPlayernumber();
+        int playernum = g.getPlayerNumber();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         width = (displayMetrics.widthPixels - Math.round(changeDpToPixel(60))) / playernum;
@@ -139,13 +143,14 @@ public class Table extends AppCompatActivity {
     private void addTableRow() {
         tableLayout = findViewById(R.id.calculatortable);
 
-        int roundsno = g.getNoOfRounds(), playernum = g.getPlayernumber();
+        int roundsno = g.getNoOfRounds(), playernum = g.getPlayerNumber();
         roundsno += roundsno - 1;
         for(int i = 1; i <= roundsno; i++) {
             TableRow pointsRow = (TableRow) getLayoutInflater().inflate(R.layout.tablerow_table, null);
             for(int j = 1; j <= playernum; j++) {
                 for(int k = 1; k <= 2; k++) {
                     TextView textView = new EditText(getApplicationContext());
+                    textView.setId(i * 100 + j * 10 + k);
                     textView.setTag(i * 100 + j * 10 + k);
                     //guessText.setMinWidth(300);
                     textView.setWidth(changeDpToPixel(35));
